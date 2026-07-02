@@ -2,13 +2,18 @@ type ScrollCallback = (scrollY: number, viewportH: number, docH: number) => void
 
 let subscribers = new Set<ScrollCallback>();
 let raf = 0;
+let cachedViewportH = 0;
+let cachedDocH = 1;
+
+function updateDimensions() {
+  cachedViewportH = window.innerHeight;
+  cachedDocH = Math.max(document.documentElement.scrollHeight - cachedViewportH, 1);
+}
 
 function notify() {
   const scrollY = window.scrollY;
-  const viewportH = window.innerHeight;
-  const docH = Math.max(document.documentElement.scrollHeight - viewportH, 1);
   subscribers.forEach((fn) => {
-    fn(scrollY, viewportH, docH);
+    fn(scrollY, cachedViewportH, cachedDocH);
   });
 }
 
@@ -20,18 +25,24 @@ function handleScroll() {
   });
 }
 
+function handleResize() {
+  updateDimensions();
+  notify();
+}
+
 export function subscribe(fn: ScrollCallback) {
   if (subscribers.size === 0) {
+    updateDimensions();
     window.addEventListener("scroll", handleScroll, { passive: true });
-    window.addEventListener("resize", notify);
+    window.addEventListener("resize", handleResize, { passive: true });
   }
   subscribers.add(fn);
-  fn(window.scrollY, window.innerHeight, Math.max(document.documentElement.scrollHeight - window.innerHeight, 1));
+  fn(window.scrollY, cachedViewportH, cachedDocH);
   return () => {
     subscribers.delete(fn);
     if (subscribers.size === 0) {
       window.removeEventListener("scroll", handleScroll);
-      window.removeEventListener("resize", notify);
+      window.removeEventListener("resize", handleResize);
     }
   };
 }

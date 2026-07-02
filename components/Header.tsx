@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import { subscribe } from "@/lib/scrollManager";
@@ -14,10 +14,14 @@ const links = [
 export default function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const headerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    return subscribe((scrollY) => {
+    return subscribe((scrollY, viewportH, docH) => {
       setScrolled(scrollY > 24);
+      if (headerRef.current) {
+        headerRef.current.style.setProperty("--scroll", Math.min(scrollY / docH, 1).toFixed(4));
+      }
     });
   }, []);
 
@@ -38,7 +42,7 @@ export default function Header() {
       }`}
     >
       <div className="mx-auto max-w-[1760px]">
-        <div className="header-glass relative flex items-center rounded-full px-6 py-3.5 sm:px-8">
+        <div ref={headerRef} className="header-glass relative flex items-center rounded-full px-6 py-3.5 sm:px-8">
           <div className="flex flex-1 items-center gap-3 sm:gap-3">
             <a href="#" aria-label="Inicio" className="flex items-center gap-2.5 sm:gap-3">
               <Image

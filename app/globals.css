@@ -3,8 +3,6 @@
 @tailwind utilities;
 
 :root {
-  --scroll: 0;
-  --hero-progress: 0;
   color-scheme: light;
   background: #f7f7f3;
 }
@@ -117,10 +115,7 @@ body::before {
 }
 
 .hero-media {
-  transform:
-    translateY(calc(var(--hero-progress) * 18px))
-    scale(calc(1 - var(--hero-progress) * 0.018));
-  transition: border-radius 0.2s linear;
+  will-change: transform, border-radius;
 }
 
 .hero-media video {

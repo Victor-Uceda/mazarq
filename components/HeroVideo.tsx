@@ -10,16 +10,18 @@ export default function HeroVideo() {
   useEffect(() => {
     return subscribe((scrollY, viewportH) => {
       const progress = Math.min(scrollY / (viewportH * 1.15), 1);
+      const heroProgress = Math.min(scrollY / (viewportH * 1.1), 1);
       const scale = 1.04 + progress * 0.12;
       const translateY = progress * 18;
       const opacity = 1 - progress * 0.28;
 
       if (videoRef.current) {
-        videoRef.current.style.transform = `scale(${scale}) translateY(${translateY}px)`;
+        videoRef.current.style.transform = `scale(${scale}) translateY(${translateY}px) translateZ(0)`;
         videoRef.current.style.opacity = `${opacity}`;
       }
 
       if (shellRef.current) {
+        shellRef.current.style.transform = `translate3d(0, ${heroProgress * 18}px, 0) scale(${1 - heroProgress * 0.018})`;
         shellRef.current.style.borderRadius = `${7 + progress * 5}rem ${7 + progress * 5}rem ${2.4 + progress * 2}rem ${2.4 + progress * 2}rem`;
       }
     });
