@@ -8,6 +8,13 @@ export default function ScrollAtmosphere() {
 
   useEffect(() => {
     return subscribe((scrollY, viewportH, docH) => {
+      if (window.innerWidth <= 768) {
+        if (containerRef.current) {
+          containerRef.current.style.setProperty("--scroll", "0");
+        }
+        return;
+      }
+      
       const progress = Math.min(scrollY / docH, 1);
       
       if (containerRef.current) {

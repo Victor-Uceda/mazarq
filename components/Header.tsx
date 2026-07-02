@@ -20,6 +20,10 @@ export default function Header() {
     return subscribe((scrollY, viewportH, docH) => {
       setScrolled(scrollY > 24);
       if (headerRef.current) {
+        if (window.innerWidth <= 768) {
+          headerRef.current.style.setProperty("--scroll", "0");
+          return;
+        }
         headerRef.current.style.setProperty("--scroll", Math.min(scrollY / docH, 1).toFixed(4));
       }
     });

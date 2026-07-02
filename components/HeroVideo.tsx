@@ -9,6 +9,18 @@ export default function HeroVideo() {
 
   useEffect(() => {
     return subscribe((scrollY, viewportH) => {
+      if (window.innerWidth <= 768) {
+        if (videoRef.current) {
+          videoRef.current.style.transform = "none";
+          videoRef.current.style.opacity = "1";
+        }
+        if (shellRef.current) {
+          shellRef.current.style.transform = "none";
+          shellRef.current.style.borderRadius = "";
+        }
+        return;
+      }
+
       const progress = Math.min(scrollY / (viewportH * 1.15), 1);
       const heroProgress = Math.min(scrollY / (viewportH * 1.1), 1);
       const scale = 1.04 + progress * 0.12;
