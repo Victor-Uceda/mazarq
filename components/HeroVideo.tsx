@@ -3,6 +3,8 @@
 import { useEffect, useRef } from "react";
 import { subscribe } from "@/lib/scrollManager";
 
+/** Hero video with scroll‑driven scale / opacity / border‑radius animation.
+ *  Disabled on mobile. Video plays once then pauses (no loop). */
 export default function HeroVideo() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const shellRef = useRef<HTMLDivElement>(null);
@@ -10,14 +12,8 @@ export default function HeroVideo() {
   useEffect(() => {
     return subscribe((scrollY, viewportH) => {
       if (window.innerWidth <= 768) {
-        if (videoRef.current) {
-          videoRef.current.style.transform = "none";
-          videoRef.current.style.opacity = "1";
-        }
-        if (shellRef.current) {
-          shellRef.current.style.transform = "none";
-          shellRef.current.style.borderRadius = "";
-        }
+        if (videoRef.current) { videoRef.current.style.transform = "none"; videoRef.current.style.opacity = "1"; }
+        if (shellRef.current) { shellRef.current.style.transform = "none"; shellRef.current.style.borderRadius = ""; }
         return;
       }
 
@@ -31,7 +27,6 @@ export default function HeroVideo() {
         videoRef.current.style.transform = `scale(${scale}) translateY(${translateY}px) translateZ(0)`;
         videoRef.current.style.opacity = `${opacity}`;
       }
-
       if (shellRef.current) {
         shellRef.current.style.transform = `translate3d(0, ${heroProgress * 18}px, 0) scale(${1 - heroProgress * 0.018})`;
         shellRef.current.style.borderRadius = `${7 + progress * 5}rem ${7 + progress * 5}rem ${2.4 + progress * 2}rem ${2.4 + progress * 2}rem`;
@@ -46,10 +41,7 @@ export default function HeroVideo() {
     >
       <video
           ref={videoRef}
-          autoPlay
-          muted
-          playsInline
-          preload="metadata"
+          autoPlay muted playsInline preload="metadata"
           onEnded={(e) => (e.target as HTMLVideoElement).pause()}
           className="absolute inset-0 h-full w-full object-cover brightness-[1.08] contrast-[0.92] saturate-[0.82]"
         >

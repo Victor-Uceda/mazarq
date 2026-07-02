@@ -3,6 +3,8 @@
 import { useEffect, useRef } from "react";
 import { subscribe } from "@/lib/scrollManager";
 
+/** Ambient background layer – drives CSS custom properties for clouds and
+ *  atmosphere based on scroll progress. Disabled on mobile. */
 export default function ScrollAtmosphere() {
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -14,9 +16,9 @@ export default function ScrollAtmosphere() {
         }
         return;
       }
-      
+
       const progress = Math.min(scrollY / docH, 1);
-      
+
       if (containerRef.current) {
         containerRef.current.style.setProperty("--scroll", progress.toFixed(4));
       }

@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react";
 
+/** Returns `true` when the viewport is narrower than 768 px.
+ *  Used to disable scroll‑driven effects on mobile devices. */
 export function useIsMobile() {
   const [isMobile, setIsMobile] = useState(false);
 

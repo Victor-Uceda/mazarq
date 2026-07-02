@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import type { ReactNode } from "react";
 
+/** Scroll‑reveal wrapper – fades and slides children up when they enter the viewport. */
 type RevealProps = {
   children: ReactNode;
   className?: string;

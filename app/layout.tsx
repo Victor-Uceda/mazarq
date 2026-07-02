@@ -1,3 +1,5 @@
+/** Root layout – font loading, metadata, and top‑level HTML structure. */
+
 import type { Metadata } from "next";
 import { Cormorant_Garamond, Inter_Tight } from "next/font/google";
 import "./globals.css";

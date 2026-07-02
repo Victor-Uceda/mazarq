@@ -1,3 +1,7 @@
+/** Single RAF‑throttled scroll/resize subscription manager.
+ *  All scroll‑driven components subscribe here instead of adding
+ *  their own listeners, keeping the page at a single RAF loop. */
+
 type ScrollCallback = (scrollY: number, viewportH: number, docH: number) => void;
 
 let subscribers = new Set<ScrollCallback>();
@@ -12,17 +16,12 @@ function updateDimensions() {
 
 function notify() {
   const scrollY = window.scrollY;
-  subscribers.forEach((fn) => {
-    fn(scrollY, cachedViewportH, cachedDocH);
-  });
+  subscribers.forEach((fn) => fn(scrollY, cachedViewportH, cachedDocH));
 }
 
 function handleScroll() {
   if (raf) return;
-  raf = requestAnimationFrame(() => {
-    notify();
-    raf = 0;
-  });
+  raf = requestAnimationFrame(() => { notify(); raf = 0; });
 }
 
 function handleResize() {
